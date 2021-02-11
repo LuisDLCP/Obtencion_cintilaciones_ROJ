@@ -1,12 +1,18 @@
+#!/home/luis/anaconda3/bin/python3
+
 import pandas as pd
 import datetime
+import glob
 
-ismr_fileName = "ljic246a30.20_.ismr"
+#ismr_fileName = "ljic246a15.20_.ismr"
+root_path = "/home/luis/Desktop/Proyects_Files/LISN/GPSs/Tareas/Obtencion_cintilaciones/"
+input_files_path = root_path + "data_input/Data_set/"
+output_files_path = root_path + "data_output/"
 
 # Read ISMR files
-def readISMR():
+def readISMR(input_file_name):
     # Read ismr file
-    data = pd.read_csv(ismr_fileName, header=None, squeeze=True)
+    data = pd.read_csv(input_files_path + input_file_name, header=None, squeeze=True)
     return data
 
 # Convert an ISMR to LISN format file
@@ -137,8 +143,8 @@ def get_PRN(svid):
     return prn
 
 # Generate lisn file name
-def get_file_name(data):
-    station_name = ismr_fileName[:4]
+def get_file_name(file_name, data):
+    station_name = file_name[:4]
 
     a = list(data.iloc[0,[0,1]])
     today = str(a[0])+"-"+str(a[1])+";00:00:00" # e.g. '20-219;00:00:00'
@@ -152,16 +158,20 @@ def get_file_name(data):
 
     return file_name
 
-def save_csv(value):
-    s4_name = get_file_name(value)
+def save_csv(file_name, value):
+    s4_name = get_file_name(file_name, value)
     # Save dataFrame to csv file
-    value.to_csv(s4_name, sep='\t',index=False,header=False,encoding='utf-8')
+    value.to_csv(output_files_path + s4_name, sep='\t',index=False,header=False,encoding='utf-8')
     return "Ok"
 
 def main():
-    dframe_ismr = readISMR()
-    dframe_lisn = ismr2lisn(dframe_ismr)
-    save_csv(dframe_lisn)
+    list_input_files = glob.glob(input_files_path + "*.ismr")
+    if len(list_input_files) > 0:
+        for file_i in list_input_files:
+            file_name = file_i[len(input_files_path):]    
+            dframe_ismr = readISMR(file_name)
+            dframe_lisn = ismr2lisn(dframe_ismr)
+            save_csv(file_name, dframe_lisn)
 
 if __name__ == '__main__':
     main()
