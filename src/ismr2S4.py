@@ -1,12 +1,14 @@
-#!/home/luis/anaconda3/bin/python3
+#!/usr/bin/python3.6
 
+import numpy as np
 import pandas as pd
 import datetime
 import glob
+import os 
 
-#ismr_fileName = "ljic246a15.20_.ismr"
-root_path = "/home/luis/Desktop/Proyects_Files/LISN/GPSs/Tareas/Obtencion_cintilaciones/"
+root_path = "/home/cesar/Desktop/luisd/scripts/Obtencion_cintilaciones/"
 input_files_path = root_path + "data_input/Data_set/"
+input_files_path_op = root_path + "data_input/Data_procesada/"
 output_files_path = root_path + "data_output/"
 
 # Read ISMR files
@@ -172,6 +174,9 @@ def main():
             dframe_ismr = readISMR(file_name)
             dframe_lisn = ismr2lisn(dframe_ismr)
             save_csv(file_name, dframe_lisn)
+            # Move input files to a permanent directory
+            os.rename(file_i, input_files_path_op+file_name)
 
 if __name__ == '__main__':
     main()
+    print("Finish succesfully!")
