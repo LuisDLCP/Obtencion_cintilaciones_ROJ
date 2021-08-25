@@ -10,7 +10,7 @@ import os
 root_path = "/home/cesar/Desktop/luisd/scripts/Obtencion_cintilaciones/"
 input_files_path = root_path + "data_input/Data_set/"
 input_files_path_op = root_path + "data_input/Data_procesada/"
-output_files_path = root_path + "data_output/lisn-enriched/"
+output_files_path = root_path + "data_output/lisn_enriched/"
 
 # Read ISMR files
 def readISMR(input_file_name):
